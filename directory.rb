@@ -1,7 +1,19 @@
 @students = [] # empty array accessible to all methods
 
-def load_students
-  file = File.open("students.csv", "r")
+def try_load_students
+  filename = ARGV.first # ruby directory.rb students.csv
+  return if filename.nil? # stop if no arguments passed via command line
+  if File.exists?(filename)
+    load_students(filename)
+    puts "Loaded #{@students.count} from #{filename}"
+  else # if file doesn't exist
+    puts "Sorry, #{filename} doesn't exist."
+    exit
+  end
+end
+
+def load_students(filename = "students.csv")
+  file = File.open(filename, "r")
   file.readlines.each do |line|
     name, cohort = line.chomp.split(",")
       @students << {name: name, cohort: cohort.to_sym}
@@ -46,7 +58,7 @@ def input_students
   # create an empty array
   # students = []
   # get the first name
-  name = gets.chomp
+  name = STDIN.gets.chomp
   # while the name is not empty, repeat this code.
   # If user hits return twice, we return the array of students
   while !name.empty? do
@@ -54,7 +66,7 @@ def input_students
     @students << {name: name, cohort: :november}
     puts "Now we have #{@students.count} students"
     # get another name from the user
-    name = gets.chomp
+    name = STDIN.gets.chomp
   end
   # return the array of students
   # students
@@ -66,7 +78,7 @@ def interactive_menu
     # 1. print the menu and ask the user what to do
     print_menu
     # 2. read the input and save it into a variable
-    process(gets.chomp) # passing user selection as an argument to the process method
+    process(STDIN.gets.chomp) # passing user selection as an argument to the process method
     # 3. do what the user has asked
   end
 end
@@ -115,4 +127,5 @@ def save_students
 end
 
 # calling the methods
+try_load_students
 interactive_menu
