@@ -65,7 +65,7 @@ end
 def print_menu
   puts "1. Input the students"
   puts "2. Show the students"
-  # placeholder
+  puts "3. Save the list to students.csv"
   puts "9. Exit"
 end
 
@@ -83,11 +83,23 @@ def process(selection)
     when "2"
       # show the students
       show_students
+    when "3"
+      save_students
     when "9"
       exit # terminate the program. Or break?
     else
       puts "I don't understand. Try again"
     end
+end
+
+def save_students
+  file = File.open("students.csv", "w")
+  @students.each do |student| # iteration
+    student_data = [student[:name], student[:cohort]] # array which takes the student name and cohort
+    csv_line = student_data.join(",") # one line of CSV: join the elements of the array with a comma
+    file.puts csv_line # write the CSV line into the file
+  end
+  file.close
 end
 
 # calling the methods
